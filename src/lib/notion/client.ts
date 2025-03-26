@@ -57,6 +57,12 @@ const client = new Client({
 let postsCache: Post[] | null = null
 let dbCache: Database | null = null
 
+function getTodayInJST(): string {
+  const now = new Date()
+  const jst = new Date(now.getTime() + 9 * 60 * 60 * 1000)
+  return jst.toISOString().split('T')[0]
+}
+
 export async function getAllPosts(): Promise<Post[]> {
   if (postsCache !== null) {
     return Promise.resolve(postsCache)
@@ -75,7 +81,7 @@ export async function getAllPosts(): Promise<Post[]> {
         {
           property: 'Date',
           date: {
-            on_or_before: new Date().toISOString(),
+            on_or_before: getTodayInJST(),
           },
         },
       ],
